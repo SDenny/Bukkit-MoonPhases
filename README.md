@@ -10,3 +10,6 @@ Phase 6: Mobs do 1.2x Damage and drop 1.2x XP
 Phase 7: Mobs do 1.5x Damage and drop 1.5x XP
 
 Each night that is configured to cause more damage by mobs, player damage is reduced to 1/DamageMultiplier as well, so watch out for that!
+
+#Configuration:
+Ensure that in config.yml, your main world is set to whatever world you want the plugin to be active in. Currently does not support working in multiple worlds.
