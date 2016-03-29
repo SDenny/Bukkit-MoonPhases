@@ -8,3 +8,5 @@ Phase 0 (Full/Blood Moon): Mobs do 2x damage and drop 2.5x XP
 Phase 1 to Phase 5: Mobs do 1x Damage and drop 1x XP
 Phase 6: Mobs do 1.2x Damage and drop 1.2x XP
 Phase 7: Mobs do 1.5x Damage and drop 1.5x XP
+
+Each night that is configured to cause more damage by mobs, player damage is reduced to 1/DamageMultiplier as well, so watch out for that!
