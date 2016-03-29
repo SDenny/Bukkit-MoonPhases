@@ -1,0 +1,7 @@
+main: com.minecraftport.moonphases.main
+version: 0.16
+name: MoonPhases
+description: Tells the player what phase the moon is in.
+commands:
+  phase:
+    description: Tells the player the current moon's phase.
