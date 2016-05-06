@@ -6,7 +6,7 @@
 
     <groupId>com.minecraftport.moonPhases</groupId>
     <artifactId>MoonPhases</artifactId>
-    <version>0.35</version>
+    <version>0.36</version>
     <description>Tells the player what phase the moon is in and adds effects to mobs based on that phase.</description>
 
 
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.7.9-R0.2</version>
+            <version>1.9.2-R0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

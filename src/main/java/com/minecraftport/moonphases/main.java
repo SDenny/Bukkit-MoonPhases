@@ -1,9 +1,6 @@
 package com.minecraftport.moonphases;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -20,22 +17,28 @@ public class main extends JavaPlugin {
     public static String endMsg;
     public static String curPhase;
     public static String sunriseMsg;
-    public static double XPXtra;
+    public static double XPMult;
     public static double DmgMult;
+    public static int nightStarts;
+    public static int nightEnds;
+    public PluginDescriptionFile config;
     public final everythingListener evl = new everythingListener(this);
     public final String tag = "[MoonPhases]";
-    public String mainworld = getConfig().getString("mainworld");
+    public String mainWorld = getConfig().getString("mainWorld");
+
+    private boolean nightMessageSent = false;
+    private boolean dayMessageSent = false;
 
     @Override
     public void onDisable() {
-        PluginDescriptionFile config = this.getDescription();
+        config = this.getDescription();
         String tag = "[MoonPhases]";
         System.out.println(tag + " MoonPhases v." + config.getVersion() + " has been disabled!");
     }
 
     @Override
     public void onEnable() {
-        PluginDescriptionFile config = this.getDescription();
+        config = this.getDescription();
         getConfig().options().copyDefaults(true);
         saveConfig();
 
@@ -43,49 +46,56 @@ public class main extends JavaPlugin {
         System.out.println(tag + " MoonPhases v." + config.getVersion() + " has been enabled!");
         pm.registerEvents(evl, this);
 
-        if (Bukkit.getWorld(mainworld) != null) {
+        nightStarts = getConfig().getInt("nightStarts");
+        nightEnds = getConfig().getInt("nightEnds");
+
+        if (Bukkit.getWorld(mainWorld) != null) {
             this.getServer().getScheduler().scheduleSyncRepeatingTask(
                     this,
                     new Runnable() {
-                        @Override
                         public void run() {
-                            double day = getServer().getWorld(mainworld).getFullTime() / 24000;
+                            double day = getServer().getWorld(mainWorld).getFullTime() / 24000;
                             int phase = (int) (day % 8);
 
                             moonSettings.getPhaseInfo(phase);
 
-                            if (getServer().getWorld(mainworld).getTime() >= 13000 && getServer().getWorld(mainworld).getTime() <= 13019) {
+                            if (isNight() && !nightMessageSent) {
+                                nightMessageSent = true;
+                                dayMessageSent = false;
                                 for (Player p : Bukkit.getOnlinePlayers()) {
                                     p.sendMessage(ChatColor.DARK_GRAY + "It is now night and the moon is out.");
                                     sendStatusMsg(p);
                                     Location ploc = p.getLocation();
                                     if(phase == 0) {
-                                        p.playSound(ploc, Sound.WOLF_HOWL, 0.5f, 0.5f);
+                                        p.playSound(ploc, Sound.ENTITY_WOLF_HOWL, 0.5f, 0.5f);
                                     }
                                 }
-                            } else if (getServer().getWorld(mainworld).getTime() >= 22980 && getServer().getWorld(mainworld).getTime() <= 22999) {
+                            } else if (!isNight() && !dayMessageSent) {
+                                nightMessageSent = false;
+                                dayMessageSent = true;
                                 for (Player p : Bukkit.getOnlinePlayers()) {
                                     p.sendMessage(ChatColor.GOLD + "The sun has risen" + sunriseMsg);
                                 }
                             }
 
                             if (getConfig().getBoolean("fullMoonAngryWolves")) {
-
+                                double radius = 16D;
                                 for (Player p : Bukkit.getOnlinePlayers()) {
-                                    double radius = 16D;
-                                    Location loc = p.getLocation();
-                                    List<Entity> near = loc.getWorld().getEntities();
-                                    for (Entity e : near) {
-                                        if(e.getLocation().distance(loc) <= radius) {
-                                            if (e instanceof Wolf) {
-                                                if (phase == 0 && !((Wolf) e).isTamed() && isNight()) {
-                                                    ((Wolf) e).setAngry(true);
-                                                    ((Wolf) e).setTarget(p);
-                                                    ((Wolf) e).setMaxHealth(10);
-                                                } else if(((Wolf) e).getMaxHealth() == 10) {
-                                                    ((Wolf) e).setAngry(false);
-                                                    ((Wolf) e).setTarget(null);
-                                                    ((Wolf) e).setMaxHealth(8);
+                                    if(p.getGameMode() == GameMode.SURVIVAL) {
+                                        Location loc = p.getLocation();
+                                        List<Entity> near = loc.getWorld().getEntities();
+                                        for (Entity e : near) {
+                                            if (e.getLocation().distance(loc) <= radius) {
+                                                if (e instanceof Wolf) {
+                                                    if (phase == 0 && !((Wolf) e).isTamed() && isNight()) {
+                                                        ((Wolf) e).setAngry(true);
+                                                        ((Wolf) e).setTarget(p);
+                                                        ((Wolf) e).setMaxHealth(10);
+                                                    } else if (((Wolf) e).getMaxHealth() == 10) {
+                                                        ((Wolf) e).setAngry(false);
+                                                        ((Wolf) e).setTarget(null);
+                                                        ((Wolf) e).setMaxHealth(8);
+                                                    }
                                                 }
                                             }
                                         }
@@ -96,21 +106,21 @@ public class main extends JavaPlugin {
                     }, 20, 20
             );
         } else {
-            System.out.println(tag + "The world set in the config, \"" + mainworld + "\", does not exist! MoonPhases WILL NOT WORK.");
+            System.out.println(tag + "The world set in the config, \"" + mainWorld + "\", does not exist! MoonPhases WILL NOT WORK.");
             getPluginLoader().disablePlugin(this);
         }
     }
 
-    private boolean isNight() {
-        return (getServer().getWorld(mainworld).getTime() >= 13000 && getServer().getWorld(mainworld).getTime() <= 23000);
+    public boolean isNight() {
+        return (getServer().getWorld(mainWorld).getTime() >= nightStarts && getServer().getWorld(mainWorld).getTime() <= nightEnds);
     }
 
     public void sendStatusMsg(Player p) {
         if (isNight()) {
             p.sendMessage(ChatColor.GRAY + "Current moon phase is " + curPhase + ChatColor.GRAY);
             if (main.DmgMult != 1) {
-                if (main.XPXtra != 1) {
-                    endMsg = "" + ChatColor.RESET + ChatColor.YELLOW + " until sunrise and drop " + ChatColor.BLUE + ChatColor.ITALIC + ChatColor.BOLD + XPXtra + "x XP!";
+                if (main.XPMult != 1) {
+                    endMsg = "" + ChatColor.RESET + ChatColor.YELLOW + " until sunrise and drop " + ChatColor.BLUE + ChatColor.ITALIC + ChatColor.BOLD + XPMult + "x XP!";
                 } else {
                     endMsg = "" + ChatColor.RESET + ChatColor.YELLOW + " until sunrise!";
                 }

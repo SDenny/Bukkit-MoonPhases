@@ -1,9 +1,6 @@
 package com.minecraftport.moonphases;
 
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-
-import static org.bukkit.Bukkit.getServer;
 
 public class moonSettings {
 
@@ -21,33 +18,33 @@ public class moonSettings {
 
     //Phase damage multipliers
     public static double phaseDmg[]={
-            2.0,//Phase 0 - full moon
-            1.0,//phase 1
-            1.0,//phase 2
-            1.0,//phase 3
-            1.0,//phase 4 - new moon
-            1.0,//phase 5
-            1.2,//phase 6
-            1.5//phase 7
+            everythingListener.plugin.getConfig().getDouble("phase0.phaseDmg"),//Phase 0 - full moon
+            everythingListener.plugin.getConfig().getDouble("phase1.phaseDmg"),//phase 1
+            everythingListener.plugin.getConfig().getDouble("phase2.phaseDmg"),//phase 2
+            everythingListener.plugin.getConfig().getDouble("phase3.phaseDmg"),//phase 3
+            everythingListener.plugin.getConfig().getDouble("phase4.phaseDmg"),//phase 4 - new moon
+            everythingListener.plugin.getConfig().getDouble("phase5.phaseDmg"),//phase 5
+            everythingListener.plugin.getConfig().getDouble("phase6.phaseDmg"),//phase 6
+            everythingListener.plugin.getConfig().getDouble("phase7.phaseDmg")//phase 7
     };
 
     //Phase XP multipliers
     public static double phaseXP[]={
-            2.5,//Phase 0 - full moon
-            1.0,//phase 1
-            1.0,//phase 2
-            1.0,//phase 3
-            1.0,//phase 4 - new moon
-            1.0,//phase 5
-            1.2,//phase 6
-            1.5//phase 7
+            everythingListener.plugin.getConfig().getDouble("phase0.phaseXP"),//Phase 0 - full moon
+            everythingListener.plugin.getConfig().getDouble("phase1.phaseXP"),//phase 1
+            everythingListener.plugin.getConfig().getDouble("phase2.phaseXP"),//phase 2
+            everythingListener.plugin.getConfig().getDouble("phase3.phaseXP"),//phase 3
+            everythingListener.plugin.getConfig().getDouble("phase4.phaseXP"),//phase 4 - new moon
+            everythingListener.plugin.getConfig().getDouble("phase5.phaseXP"),//phase 5
+            everythingListener.plugin.getConfig().getDouble("phase6.phaseXP"),//phase 6
+            everythingListener.plugin.getConfig().getDouble("phase7.phaseXP")//phase 7
     };
 
     public static void getPhaseInfo(int i) {
         //Gets all of the information associated with a particular moon phase
         main.curPhase = phaseTxt[i];
         main.DmgMult = phaseDmg[i];
-        main.XPXtra = phaseXP[i];
+        main.XPMult = phaseXP[i];
 
         if (main.DmgMult != 1.0) {
             main.sunriseMsg = " and mobs are back to normal!";

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Maven: org.bukkit:bukkit:1.9.2-R0.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../BuildTools/Bukkit/target/bukkit-1.9.2-R0.1-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="https://hub.spigotmc.org/javadocs/bukkit/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>
