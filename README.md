@@ -1,7 +1,7 @@
 # Bukkit-MoonPhases
 Tells the player what phase the moon is in on login and when it turns night. Also causes mob damage and xp rates to change depending on the phase of the moon.
 
-*Tested on Bukkit 1.7.9-R0.3*
+*Last tested on CraftBukkit 1.9.2-R0.1*
 
 All 8 phases of the moon have the ability to cause different effects on the players and mobs.
 Phase 0 (Full/Blood Moon): Mobs do 2x damage and drop 2.5x XP
