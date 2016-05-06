@@ -3,7 +3,9 @@ Tells the player what phase the moon is in on login and when it turns night. Als
 
 *__Last tested on CraftBukkit 1.9.2-R0.1__*
 
+With the default settings:
 All 8 phases of the moon have the ability to cause different effects on the players and mobs.
+Untamed wolves will turn hostile for any night where the damage multiplier is greater than 1 (and will go back to normal as soon as a player comes near during the daytime.)
 Phase 0 (Full/Blood Moon): Mobs do 2x damage and drop 2.5x XP
 Phase 1 to Phase 5: Mobs do 1x Damage and drop 1x XP
 Phase 6: Mobs do 1.2x Damage and drop 1.2x XP
